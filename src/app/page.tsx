@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
@@ -19,7 +20,10 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import confetti from "canvas-confetti";
 
-const analyzeResume = (resume: string, jobDescription: string) => {
+const analyzeResume = (
+  resume: string,
+  jobDescription: string
+): Promise<AnalysisResult> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const keywords = [
@@ -63,8 +67,10 @@ const analyzeResume = (resume: string, jobDescription: string) => {
         strengths,
         weaknesses,
         enhancements: [
-          "Claim you led a small team on a project (it was just you, but hey, self-leadership counts!)",
-          `Say you're an expert in ${weaknesses[0] || "something impressive"}`,
+          "Claim you led a small team on a project (it was just you, but hey, self-leadership counts)",
+          `Say you&apos;re an expert in ${
+            weaknesses[0] || "something impressive"
+          }`,
           "Add 'proficient in AI-powered resume enhancement' to your skills",
           "Mention you can juggle while coding (multitasking at its finest!)",
         ],
@@ -73,11 +79,18 @@ const analyzeResume = (resume: string, jobDescription: string) => {
   });
 };
 
+interface AnalysisResult {
+  matchPercentage: number;
+  strengths: string[];
+  weaknesses: string[];
+  enhancements: string[];
+}
+
 export default function Home() {
   const [step, setStep] = useState(1);
   const [resume, setResume] = useState("");
   const [jobDescription, setJobDescription] = useState("");
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -127,7 +140,7 @@ export default function Home() {
     }, 300);
 
     const result = await analyzeResume(resume, jobDescription);
-    setAnalysis(result);
+    setAnalysis(result as AnalysisResult);
     setIsAnalyzing(false);
     clearInterval(interval);
     setProgress(100);
@@ -243,8 +256,8 @@ export default function Home() {
               </Button>
             </Link>
             <p className="mt-4 text-sm">
-              Don't let your dream job slip away. Upgrade now and stand out from
-              the crowd!
+              "Don&apos;t let your dream job slip away. Upgrade now and stand
+              out from the crowd!"
             </p>
           </motion.div>
         ) : (
